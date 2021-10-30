@@ -1,0 +1,39 @@
+#general
+kubectl run nginx --image nginx
+kubectl get pods
+kubectl get nodes
+kubectl describe pods nginx
+kubectl delete pods nginx
+kubectl get pods -o wide
+kubectl run nginx --image=nginx --dry-run=client -o yaml > nginx-run.yaml
+kubectl edit pod nginx
+kubectl apply -f nginx-run.yaml
+kubectl replace -f nginx-run.yaml
+kubectl get all
+kubectl create deployment --image=nginx nginx
+kubectl create deployment --image=nginx nginx --dry-run=client -o yaml > nginx-deployment.yaml
+kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+
+#replicasets
+kubectl create -f replica_set.yaml
+kubectl get replicationcontroller
+kubectl get replicaset
+kubectl delete replicaset myapp-replicaset
+kubectl replace -f replica_set.yaml 
+-0 986 4u/
+kubectl scale --replicas=6 -f replica_set.yaml #number of replicas in the yaml file will not be changed
+kubectl scale --replicas=6 replicaset myapp-replicaset
+ 
+#namespace
+kubectl get namespace -A
+kubectl create namespace dev
+kubectl get pods --namespaces=default
+kubectl get pods --all-namespaces
+kubectl run redis --image=redis --namespace=finance
+kubectl config set-context $(kubectl config current-context) --namespace=dev
+
+#services
+kubectl get services
+
+kubectl apply -f /path/to/config/files
+ubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml > service.yaml
