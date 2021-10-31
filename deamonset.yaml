@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DeamonSet
+metadata:
+  name: monitoring-agent
+  labels:
+    app: monitoring-agent
+    type: agent
+spec:
+  template:
+    metadata:
+      name: monitoring-agent
+      labels:
+        app: myapp
+        type: agent
+      containers:
+        - name: monitoring-agent
+          image: monitoring-agent
+  replicas: 3
+  selector:
+    matchLabels:
+      app: monitoring-agent
