@@ -13,6 +13,7 @@ kubectl get all
 kubectl create deployment --image=nginx nginx
 kubectl create deployment --image=nginx nginx --dry-run=client -o yaml > nginx-deployment.yaml
 kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+kubectl get deployments.apps nginx-deployment -o yaml > nginx-dep.yaml
 
 #replicasets
 kubectl create -f replica_set.yaml
@@ -23,6 +24,7 @@ kubectl replace -f replica_set.yaml
 -0 986 4u/
 kubectl scale --replicas=6 -f replica_set.yaml #number of replicas in the yaml file will not be changed
 kubectl scale --replicas=6 replicaset myapp-replicaset
+kubectl edit deployment my-deployment
  
 #namespace
 kubectl get namespace -A
@@ -34,6 +36,17 @@ kubectl config set-context $(kubectl config current-context) --namespace=dev
 
 #services
 kubectl get services
-
 kubectl apply -f /path/to/config/files
 ubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml > service.yaml
+
+#labels
+kubectl get pod -l env=prod,bu=finance,tier=frontend
+kubectl get all -l env=prod  --no-headers | wc
+kubectl label nodes <node-name> <label-key>=<label-value>
+kubectl get nodes node01 --show-label
+
+#taints and toleration, node selector, node affinity
+kubectl taint nodes node1 app=blue:NoSchedule
+kubectl taint nodes node01 spray=mortein:NoExecute
+kubectl taint nodes controlplane node-role.kubernetes.io/master:NoSchedule-   #to untaint node
+kubectl label noded node01 size=Large
