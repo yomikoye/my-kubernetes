@@ -66,5 +66,13 @@ kubectl rollout undo deployment
 kubectl get configmaps
 
 #cluster maintanance
-kubectl drain node-1
+kubectl drain node-1 # drain pods to other nodes and render unschedulable
+kubectl cordon node-01 #render unschedulable but dones not drain already kubectl drain node01 --ignore-daemonsetsexisting pods
 kubectl uncordon node-1
+kubectl drain node01 --ignore-daemonsets
+
+apt-mark unhold kubelet kubectl && \
+    apt-get update && apt-get install -y kubelet=1.20.0-00 kubectl=1.20.0-00 && \
+    apt-mark hold kubelet kubectl
+
+    kubectl auth can-i create pods --as devuser --namespace test
