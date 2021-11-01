@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+  labels:
+    app: myapp
+data:
+  my-key: my-value
+  app_mode: prod
+  app_color: prod
