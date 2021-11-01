@@ -50,3 +50,21 @@ kubectl taint nodes node1 app=blue:NoSchedule
 kubectl taint nodes node01 spray=mortein:NoExecute
 kubectl taint nodes controlplane node-role.kubernetes.io/master:NoSchedule-   #to untaint node
 kubectl label noded node01 size=Large
+
+#kublet service location
+cd /var/lib/kubelet
+
+#metrics server
+kubectl top node
+kubectl top pod
+kubectl logs -f <pod-name> <container-name> #stream logs to stdout
+
+#lifecycle management
+kubectl rollout status deployment 
+kubectl rollout history deployment 
+kubectl rollout undo deployment 
+kubectl get configmaps
+
+#cluster maintanance
+kubectl drain node-1
+kubectl uncordon node-1
