@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  nginx-deployment
+  labels:
+    name:  nginx
+spec:
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  replicas: 4
+  selector:
+      matchLabels:
+        name: nginx
+  template:
+    metadata:
+      labels:
+        name:  nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/bash", "-c", "sleep 20"]
+        topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              name: nginx
+        - maxSkew: 1
+          topologyKey: node
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              name: nginx
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    name: nginx
+  ports:
+  - protocol: TCP
+    targetPort: 80
+    port: 80
+
